@@ -1,0 +1,9 @@
+{
+    "servers": {
+        "my-mcp-server-4865ee08": {                
+            "type": "stdio",
+            "command": "bash",
+            "args": ["-c", "cd /home/shubh/Desktop/gmail-mcp && npm run start"],
+        }
+    }
+}
