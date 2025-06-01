@@ -30,7 +30,7 @@ export async function fetchEmails(options: {
   mailbox?: string;
   searchCriteria?: any[];
 }): Promise<Email[]> {
-  const { limit = 10, mailbox = 'INBOX', searchCriteria = ['UNSEEN'] } = options;
+  const { limit = 10, mailbox = 'INBOX', searchCriteria = ['ALL'] } = options;
   
   return new Promise((resolve, reject) => {
     const imap = createImapConnection();
@@ -54,8 +54,8 @@ export async function fetchEmails(options: {
             return resolve([]);
           }
 
-          // Limit the number of emails to fetch
-          const limitedResults = results.slice(0, limit);
+          // Reverse the results to get latest emails first, then limit
+          const limitedResults = results.reverse().slice(0, limit);
 
           const fetchOptions = {
             bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE MESSAGE-ID)', 'TEXT'],
