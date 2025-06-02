@@ -1,74 +1,125 @@
-# FastMCP Boilerplate
+# Gmail MCP Server
 
-A boilerplate for [FastMCP](https://github.com/punkpeye/fastmcp).
+A Model Context Protocol (MCP) server for Gmail integration, built with [FastMCP](https://github.com/punkpeye/fastmcp). This server provides AI assistants with the ability to interact with Gmail through a set of standardized tools.
 
-This boilerplate is a good starting point for building an MCP server. It includes a basic setup for testing, linting, formatting, and publishing to NPM.
+## Overview
 
-## Development
+This project implements an MCP server that allows AI assistants to perform various Gmail operations including:
 
-To get started, clone the repository and install the dependencies.
+- Fetching emails from your inbox
+- Searching emails by subject
+- Searching emails from specific senders
+- Retrieving unread emails
+- Sending emails to recipients
+
+The server uses IMAP for email retrieval and SMTP for sending emails, all secured through Gmail's authentication system.
+
+## Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+- Gmail account
+- Gmail App Password (for authentication)
+
+## Setup
+
+1. Clone the repository
 
 ```bash
-git clone https://github.com/punkpeye/fastmcp-boilerplate.git
-cd fastmcp-boilerplate
+git clone <repository-url>
+cd gmail-mcp
+```
+
+2. Install dependencies
+
+```bash
 npm install
+```
+
+3. Create a `.env` file in the root directory with the following variables:
+
+```
+GMAIL_USER=kesharwanis084@gmail.com
+GMAIL_APP_PASSWORD=your-app-password
+```
+
+To generate an App Password for your Gmail account:
+1. Go to your Google Account > Security
+2. Enable 2-Step Verification if not already enabled
+3. Go to App passwords
+4. Select "Mail" and your device
+5. Click "Generate"
+
+## Usage
+
+### Starting the Server
+
+Start the server in development mode:
+
+```bash
 npm run dev
 ```
 
-> [!NOTE]
-> If you are starting a new project, you may want to fork [fastmcp-boilerplate](https://github.com/punkpeye/fastmcp-boilerplate) and start from there.
-
-### Start the server
-
-If you simply want to start the server, you can use the `start` script.
+Or in production mode:
 
 ```bash
+npm run build
 npm run start
 ```
 
-However, you can also interact with the server using the `dev` script.
+## Available Tools
 
-```bash
-npm run dev
-```
+The server provides the following tools for AI assistants:
 
-This will start the server and allow you to interact with it using CLI.
+### 1. fetchEmails
 
-### Testing
+Fetches emails from your inbox with optional filtering.
 
-A good MCP server should have tests. However, you don't need to test the MCP server itself, but rather the tools you implement.
+**Parameters:**
+- `limit` (optional): Maximum number of emails to fetch (default: 10)
+- `mailbox` (optional): Mailbox to fetch emails from (default: 'INBOX')
+- `searchCriteria` (optional): IMAP search criteria (default: ['ALL'])
 
-```bash
-npm run test
-```
+### 2. fetchEmailsBySubject
 
-In the case of this boilerplate, we only test the implementation of the `add` tool.
+Fetches emails with a specific subject.
 
-### Linting
+**Parameters:**
+- `subject`: Subject to search for
+- `limit` (optional): Maximum number of emails to fetch (default: 10)
 
-Having a good linting setup reduces the friction for other developers to contribute to your project.
+### 3. fetchEmailsFromSender
 
-```bash
-npm run lint
-```
+Fetches emails from a specific sender.
 
-This boilerplate uses [Prettier](https://prettier.io/), [ESLint](https://eslint.org/) and [TypeScript ESLint](https://typescript-eslint.io/) to lint the code.
+**Parameters:**
+- `sender`: Email address of the sender
+- `limit` (optional): Maximum number of emails to fetch (default: 10)
 
-### Formatting
+### 4. fetchUnreadEmails
 
-Use `npm run format` to format the code.
+Fetches unread emails from your inbox.
 
-```bash
-npm run format
-```
+**Parameters:**
+- `limit` (optional): Maximum number of emails to fetch (default: 10)
 
-### GitHub Actions
+### 5. sendEmails
 
-This repository has a GitHub Actions workflow that runs linting, formatting, tests, and publishes package updates to NPM using [semantic-release](https://semantic-release.gitbook.io/semantic-release/).
+Sends an email to a specified recipient.
 
-In order to use this workflow, you need to:
+**Parameters:**
+- `to`: Email address of the recipient
+- `subject`: Subject of the email
+- `body`: Body of the email
 
-1. Add `NPM_TOKEN` to the repository secrets
-   1. [Create a new automation token](https://www.npmjs.com/settings/punkpeye/tokens/new)
-   2. Add token as `NPM_TOKEN` environment secret (Settings → Secrets and Variables → Actions → "Manage environment secrets" → "release" → Add environment secret)
-1. Grant write access to the workflow (Settings → Actions → General → Workflow permissions → "Read and write permissions")
+## Security
+
+This server uses environment variables to store sensitive information like your Gmail credentials. Never commit your `.env` file to version control.
+
+## Technical Details
+
+The project is built with:
+- TypeScript for type safety
+- Node.js IMAP and Nodemailer libraries for email operations
+- FastMCP for MCP server implementation
+- dotenv for environment variable management
