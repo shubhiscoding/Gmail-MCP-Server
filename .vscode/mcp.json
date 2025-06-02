@@ -1,9 +1,0 @@
-{
-    "servers": {
-        "gmail-mcp": {                
-            "type": "stdio",
-            "command": "bash",
-            "args": ["-c", "cd /home/shubh/Desktop/Gmail-MCP-Server && npm run start"],
-        }
-    }
-}
