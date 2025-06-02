@@ -151,7 +151,7 @@ export async function fetchEmailsBySubject(subject: string, limit = 10): Promise
   return fetchEmails({
     limit,
     mailbox: 'INBOX',
-    searchCriteria: ['SUBJECT', subject]
+    searchCriteria: [['SUBJECT', subject]]
   });
 }
 
@@ -162,10 +162,14 @@ export async function fetchEmailsBySubject(subject: string, limit = 10): Promise
  * @returns Promise resolving to an array of emails from the specified sender
  */
 export async function fetchEmailsFromSender(sender: string, limit = 10): Promise<Email[]> {
+  if (!sender || typeof sender !== 'string' || sender.trim() === '') {
+    throw new Error('Sender email address must be a non-empty string.');
+  }
+
   return fetchEmails({
     limit,
     mailbox: 'INBOX',
-    searchCriteria: ['FROM', sender]
+    searchCriteria: [['FROM', sender]]
   });
 }
 
