@@ -26,7 +26,7 @@ The server uses IMAP for email retrieval and SMTP for sending emails, all secure
 1. Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/shubhiscoding/Gmail-MCP-Server
 cd gmail-mcp
 ```
 
@@ -39,7 +39,7 @@ npm install
 3. Create a `.env` file in the root directory with the following variables:
 
 ```
-GMAIL_USER=kesharwanis084@gmail.com
+GMAIL_USER=your_gmail_address
 GMAIL_APP_PASSWORD=your-app-password
 ```
 
