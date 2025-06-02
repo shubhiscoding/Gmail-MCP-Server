@@ -14,13 +14,6 @@ This project implements an MCP server that allows AI assistants to perform vario
 
 The server uses IMAP for email retrieval and SMTP for sending emails, all secured through Gmail's authentication system.
 
-## Prerequisites
-
-- Node.js (v16 or higher)
-- npm or yarn
-- Gmail account
-- Gmail App Password (for authentication)
-
 ## Setup
 
 1. Clone the repository
@@ -59,13 +52,47 @@ Start the server in development mode:
 ```bash
 npm run dev
 ```
+### Configuration to run with Windsurf
 
-Or in production mode:
-
-```bash
-npm run build
-npm run start
+Configure ```mcp_config.json``` to add gmail-mcp server:
 ```
+{
+  "mcpServers": {
+    "gmail-mcp": {
+      "command": "bash",
+      "args": [
+        "-c",
+        "cd ~Your-Path-To-The-Repo/Gmail-MCP-Server && npm run start"
+      ],
+      "disabled": false
+    }
+  }
+}
+```
+
+### Configuration to run with Claude desktop on Windows
+```
+{
+  "mcpServers": {
+    "gmail-mcp": {
+      "command": "cmd",
+      "args": ["/c", "cd /d ~Your-Path-To-The-Repo\\Gmail-MCP-Server && npm run start"]
+    }
+  }
+}
+```
+
+## Video Demo
+
+### Windsruf demo
+https://github.com/user-attachments/assets/0c45ec24-be45-4271-b7d0-fc6cd58b850f
+
+### Claude Desktop Demo
+
+
+https://github.com/user-attachments/assets/ad1650e8-bcc4-481e-ab95-eaefd8de7472
+
+
 
 ## Available Tools
 
