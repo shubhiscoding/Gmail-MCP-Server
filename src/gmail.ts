@@ -1,7 +1,7 @@
 import Imap from 'imap';
 import { simpleParser } from 'mailparser';
-
-import { config } from './config';
+import nodemailer from 'nodemailer';
+import { config } from './config.js';
 
 interface Email {
   attachments: EmailAttachment[];
@@ -141,46 +141,78 @@ export async function fetchEmails(options: {
   });
 }
 
-// /**
-//  * Fetches emails with a specific subject
-//  * @param subject Subject to search for
-//  * @param limit Maximum number of emails to fetch
-//  * @returns Promise resolving to an array of emails with the specified subject
-//  */
-// export async function fetchEmailsBySubject(subject: string, limit = 10): Promise<Email[]> {
-//   return fetchEmails({
-//     limit,
-//     mailbox: 'INBOX',
-//     searchCriteria: ['SUBJECT', subject]
-//   });
-// }
+/**
+ * Fetches emails with a specific subject
+ * @param subject Subject to search for
+ * @param limit Maximum number of emails to fetch
+ * @returns Promise resolving to an array of emails with the specified subject
+ */
+export async function fetchEmailsBySubject(subject: string, limit = 10): Promise<Email[]> {
+  return fetchEmails({
+    limit,
+    mailbox: 'INBOX',
+    searchCriteria: ['SUBJECT', subject]
+  });
+}
 
-// /**
-//  * Fetches all emails from a specific sender
-//  * @param sender Email address of the sender
-//  * @param limit Maximum number of emails to fetch
-//  * @returns Promise resolving to an array of emails from the specified sender
-//  */
-// export async function fetchEmailsFromSender(sender: string, limit = 10): Promise<Email[]> {
-//   return fetchEmails({
-//     limit,
-//     mailbox: 'INBOX',
-//     searchCriteria: ['FROM', sender]
-//   });
-// }
+/**
+ * Fetches all emails from a specific sender
+ * @param sender Email address of the sender
+ * @param limit Maximum number of emails to fetch
+ * @returns Promise resolving to an array of emails from the specified sender
+ */
+export async function fetchEmailsFromSender(sender: string, limit = 10): Promise<Email[]> {
+  return fetchEmails({
+    limit,
+    mailbox: 'INBOX',
+    searchCriteria: ['FROM', sender]
+  });
+}
 
-// /**
-//  * Fetches all unread emails from the inbox
-//  * @param limit Maximum number of emails to fetch
-//  * @returns Promise resolving to an array of unread emails
-//  */
-// export async function fetchUnreadEmails(limit = 10): Promise<Email[]> {
-//   return fetchEmails({
-//     limit,
-//     mailbox: 'INBOX',
-//     searchCriteria: ['UNSEEN']
-//   });
-// }
+/**
+ * Fetches all unread emails from the inbox
+ * @param limit Maximum number of emails to fetch
+ * @returns Promise resolving to an array of unread emails
+ */
+export async function fetchUnreadEmails(limit = 10): Promise<Email[]> {
+  return fetchEmails({
+    limit,
+    mailbox: 'INBOX',
+    searchCriteria: ['UNSEEN']
+  });
+}
+
+/**
+ * Sends an email to the specified recipient
+ * @param to Email address of the recipient
+ * @param subject Subject of the email
+ * @param body Body of the email
+ * @returns Promise resolving to true if the email was sent successfully, false otherwise
+ */
+export async function sendEmail(to: string, subject: string, body: string): Promise<Boolean> {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: config.gmail.user,
+      pass: config.gmail.password
+    }
+  });
+
+  const mailOptions = {
+    from: config.gmail.user,
+    to,
+    subject,
+    text: body
+  };
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully');
+    return true;
+  } catch (error) {
+    console.error('Error sending email:', error);
+    return false;
+  }
+}
 
 /**
  * Creates an Imap connection to Gmail
